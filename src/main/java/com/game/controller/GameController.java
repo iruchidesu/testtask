@@ -41,14 +41,18 @@ public class GameController {
 
     @RequestMapping(value = "/rest/players", method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody Player player) {
-        if (player.getName() == null || player.getTitle() == null || player.getRace() == null || player.getProfession() == null
-                || player.getBirthday() == null || player.getExperience() == null)
+        if (player.getName() == null
+                || player.getTitle() == null
+                || player.getRace() == null
+                || player.getProfession() == null
+                || player.getBirthday() == null
+                || player.getExperience() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (player.getName().length() > 12 || player.getTitle().length() > 30 || player.getName().trim().isEmpty())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (player.getExperience() < 0 || player.getExperience() > 10_000_000)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (player.getBirthday().getTime() < 0 || player.getBirthday() == null)
+        if (player.getBirthday().getTime() < 0)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         LocalDate birthday = player.getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         if (birthday.getYear() < 2000 || birthday.getYear() > 3000)
@@ -72,7 +76,7 @@ public class GameController {
     }
 
     @RequestMapping(value = "/rest/players/{id}", method = RequestMethod.GET)
-    public  ResponseEntity<Player> getPlayer(@PathVariable("id") Long id) {
+    public ResponseEntity<Player> getPlayer(@PathVariable("id") Long id) {
         if (id == null || id < 1)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
